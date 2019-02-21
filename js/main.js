@@ -1,1 +1,3 @@
-showMap();
+$( document ).ready(function() {
+    showMap();
+});
