@@ -1,4 +1,13 @@
 const url='http://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101C/BefArealTathetKon';
+const MunicipalityURL = "kommun.json"; // Municipality data from https://gist.github.com/miroli/4280679f81d0006e3142
+var PopulationData;
+
+//Needed to prevent error messages in the console when readin data from json file
+$.ajaxSetup({beforeSend: function(xhr){
+  if (xhr.overrideMimeType)
+    xhr.overrideMimeType("application/json");
+  }
+});
 
 query = {
     "query": [
@@ -324,33 +333,48 @@ query = {
     }
 };
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function getRegion (regionCode) {
     var regionIndex = metadata.variables[0].values.indexOf(regionCode);
     return metadata.variables[0].valueTexts[regionIndex];
-} 
+}
 
-$.post(url, JSON.stringify(query), function( response ) {
-    data= response;
-});
+function loadMunicipalityData(TopoSweden) {
 
-$.getJSON(url, function(result) {
-    metadata = result;
-    timespan = metadata.variables[3].values.length;
-})
-
-async function showData() {
-    await sleep(2000);
-    for(var i =0 ; i< data.data.length ; i+=timespan) {
-        console.log(getRegion(data.data[i].key[0]));
-        for(var j = 0; j < timespan; ++j) {
-            var thisData = data.data[i+j];
-            console.log(thisData.key[2] + ": " + thisData.values[0]);
-        }
-    }
+  //Initialize each municipality with an empty array of population values;
+  for(var i = 0; i < TopoSweden.objects.kommuner.geometries.length; ++i)
+  {
+    TopoSweden.objects.kommuner.geometries[i].properties.popDensity = [];
   }
-  
-  //showData();
+
+  //loop through each municipality
+  for(var i =0 ; i< PopulationData.data.length ; i+=timespan) {
+      var regionCode = PopulationData.data[i].key[0];
+      var regionIndex;
+
+      //find index of municipality in topoJSON object
+      for(var j = 0; j < TopoSweden.objects.kommuner.geometries.length; ++j) {
+          var regionCode2 = TopoSweden.objects.kommuner.geometries[j].properties.KOD98_98;
+          if(regionCode == regionCode2) //municipality found {
+              regionIndex= j;
+              break;
+          }
+
+      //add population values to topojson object
+      for(var j = 0; j < timespan; ++j) {
+          var thisData = PopulationData.data[i+j];
+          TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j] = thisData.values[0];
+      }
+  }
+  return TopoSweden;
+}
+
+async function getData() {
+   return $.post(url, JSON.stringify(query)).then(function( response ) {
+    PopulationData= response;
+      return $.getJSON(url).then(function(result) {
+        metadata = result;
+        timespan = metadata.variables[3].values.length;
+        return $.getJSON(MunicipalityURL).then(loadMunicipalityData);
+    });
+  });
+}

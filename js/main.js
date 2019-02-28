@@ -1,3 +1,4 @@
-$( document ).ready(function() {
-    showMap();
+$(document).ready(function() {
+    initializeMap();
+    getData().then(addTopoToMap);
 });
