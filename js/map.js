@@ -1,3 +1,4 @@
+var info = L.control();
 
 //Can only be ran ater page has been loaded
 function initializeMap () {
@@ -8,6 +9,8 @@ function initializeMap () {
         id: 'mapbox.light',
         accessToken: 'pk.eyJ1IjoicGF0cmlrdnMiLCJhIjoiY2pzZDd4aDJhMHJmMDN6bWx1aHJpaGh4bCJ9.auJ5Pnug3A3ZXjkH92669g'
     }).addTo(mymap);
+
+    info.addTo(mymap);
 }
 
 function getColor(d) {
@@ -20,6 +23,20 @@ function getColor(d) {
         d > 5   ? '#FED976' :
                     '#FFEDA0';
 }
+
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    this._div.innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
+        '<b>' + props.KNNAMN + '</b><br />' + props.popDensity[26] + ' people / mi<sup>2</sup>'
+        : 'Hover over a state');
+};
+
 
 function style(feature) {
     return {
@@ -44,10 +61,13 @@ function highlightFeature(e) {
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
+
+    info.update(layer.feature.properties);
 }
 
 function resetHighlight(e) {
     geojson.resetStyle(e.target);
+    info.update();
 }
 
 function onEachFeature(feature, layer) {

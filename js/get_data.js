@@ -365,6 +365,7 @@ function loadMunicipalityData(TopoSweden) {
           TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j] = thisData.values[0];
       }
   }
+  console.log(TopoSweden);
   return TopoSweden;
 }
 
