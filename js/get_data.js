@@ -352,19 +352,24 @@ function loadMunicipalityData(TopoSweden) {
   for(var i =0 ; i< PopulationData.data.length ; i+=(timespan*2)) {
     var regionCode = PopulationData.data[i].key[0];
     var regionIndex;
+    var regionFound= false;
 
     //find index of municipality in topoJSON object
     for(var j = 0; j < TopoSweden.objects.kommuner.geometries.length; ++j) {
-      var regionCode2 = TopoSweden.objects.kommuner.geometries[j].properties.KOD98_98;
+      var regionCode2 = TopoSweden.objects.kommuner.geometries[j].properties.KNKOD;
       //municipality found
       if(regionCode == regionCode2) {
         regionIndex= j;
+        regionFound =true;
+        TopoSweden.objects.kommuner.geometries[j].properties.KNNAMN = getRegion(regionCode);
         break;
       }
     }
 
-    if(regionIndex == null)
+    if(!regionFound) {
+      console.log(regionCode);
       continue;
+    }
 
     //add population values to topojson object
     for(var j = 0; j < timespan; ++j) {
