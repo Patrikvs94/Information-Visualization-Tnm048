@@ -41,7 +41,7 @@ info.update = function (props) {
 function style(feature) {
     return {
         fillColor: getColor(feature.properties.popDensity[timespan-1]),
-        weight: 2,
+        weight: 1.2,
         opacity: 1,
         color: 'white',
         dashArray: '3',
@@ -52,7 +52,7 @@ function style(feature) {
 function highlightFeature(e) {
     var layer = e.target;
     layer.setStyle({
-        weight: 5,
+        weight: 2,
         color: '#666',
         dashArray: '',
         fillOpacity: 0.7
@@ -65,8 +65,59 @@ function highlightFeature(e) {
     info.update(layer.feature.properties);
 }
 
+function markFeature(e) {
+    var layer = e.target;
+    if (!e.target.hasOwnProperty("marked")) {
+        e.target.marked = true;
+        layer.setStyle({
+            weight: 1.2,
+            color: 'white',
+            fillColor: '#3473d8',
+            dashArray: '3',
+            fillOpacity: 0.7
+        });
+    } else {
+        if (e.target.marked == true) {
+            e.target.marked = false;
+            geojson.resetStyle(e.target);
+        } else {
+            e.target.marked = true;
+            layer.setStyle({
+                weight: 1.2,
+                color: 'white',
+                fillColor: '#3473d8',
+                dashArray: '3',
+                fillOpacity: 0.7
+            });
+        }
+    }
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+
+    info.update(layer.feature.properties);
+}
+
 function resetHighlight(e) {
-    geojson.resetStyle(e.target);
+    var layer = e.target;
+
+    if (!e.target.hasOwnProperty("marked")) {
+        geojson.resetStyle(e.target);
+    } else {
+        if (e.target.marked == true)
+            layer.setStyle({
+                weight: 1.2,
+                color: 'white',
+                fillColor: '#3473d8',
+                dashArray: '3',
+                fillOpacity: 0.7
+            });
+        else {
+            geojson.resetStyle(e.target);
+        }
+    }
+
     info.update();
 }
 
@@ -74,6 +125,7 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
+        click: markFeature
     });
 }
 
