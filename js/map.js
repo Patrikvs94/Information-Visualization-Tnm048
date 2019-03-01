@@ -23,7 +23,7 @@ function getColor(d) {
 
 function style(feature) {
     return {
-        fillColor: getColor(feature.properties.LANDAREAKM),
+        fillColor: getColor(feature.properties.popDensity[timespan-1]),
         weight: 2,
         opacity: 1,
         color: 'white',
