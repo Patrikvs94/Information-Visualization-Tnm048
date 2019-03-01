@@ -365,11 +365,12 @@ function loadMunicipalityData(TopoSweden) {
       //add population values to topojson object
       for(var j = 0; j < timespan; ++j) {
           var thisData = PopulationData.data[i+j];
-          TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j] = thisData.values[0];
+          TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j] = parseFloat(thisData.values[0]);
       }
       for(var j = timespan; j < timespan*2; ++j) {
         var thisData = PopulationData.data[i+j];
-        TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan] = thisData.values[0];
+        TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan] = parseFloat(thisData.values[0]);
+        
         TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j-timespan] = (TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j-timespan]+TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan]);
       }
   }
