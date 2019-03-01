@@ -342,8 +342,7 @@ function getRegion (regionCode) {
 function loadMunicipalityData(TopoSweden) {
 
   //Initialize each municipality with an empty array of population values;
-  for(var i = 0; i < TopoSweden.objects.kommuner.geometries.length; ++i)
-  {
+  for(var i = 0; i < TopoSweden.objects.kommuner.geometries.length; ++i) {
     TopoSweden.objects.kommuner.geometries[i].properties.popDensity = [];
     TopoSweden.objects.kommuner.geometries[i].properties.popDensityMen = [];
     TopoSweden.objects.kommuner.geometries[i].properties.popDensityWomen = [];
@@ -351,28 +350,33 @@ function loadMunicipalityData(TopoSweden) {
 
   //loop through each municipality
   for(var i =0 ; i< PopulationData.data.length ; i+=(timespan*2)) {
-      var regionCode = PopulationData.data[i].key[0];
-      var regionIndex;
+    var regionCode = PopulationData.data[i].key[0];
+    var regionIndex;
 
-      //find index of municipality in topoJSON object
-      for(var j = 0; j < TopoSweden.objects.kommuner.geometries.length; ++j) {
-          var regionCode2 = TopoSweden.objects.kommuner.geometries[j].properties.KOD98_98;
-          if(regionCode == regionCode2) //municipality found {
-              regionIndex= j;
-              break;
-          }
+    //find index of municipality in topoJSON object
+    for(var j = 0; j < TopoSweden.objects.kommuner.geometries.length; ++j) {
+      var regionCode2 = TopoSweden.objects.kommuner.geometries[j].properties.KOD98_98;
+      //municipality found
+      if(regionCode == regionCode2) {
+        regionIndex= j;
+        break;
+      }
+    }
 
-      //add population values to topojson object
-      for(var j = 0; j < timespan; ++j) {
-          var thisData = PopulationData.data[i+j];
-          TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j] = parseFloat(thisData.values[0]);
-      }
-      for(var j = timespan; j < timespan*2; ++j) {
-        var thisData = PopulationData.data[i+j];
-        TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan] = parseFloat(thisData.values[0]);
-        
-        TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j-timespan] = (TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j-timespan]+TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan]);
-      }
+    if(regionIndex == null)
+      continue;
+
+    //add population values to topojson object
+    for(var j = 0; j < timespan; ++j) {
+      var thisData = PopulationData.data[i+j];
+      TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j] = parseFloat(thisData.values[0]);
+    }
+    for(var j = timespan; j < timespan*2; ++j) {
+      var thisData = PopulationData.data[i+j];
+      TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan] = parseFloat(thisData.values[0]);
+      
+      TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j-timespan] = (TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j-timespan]+TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan]);
+    }
   }
   console.log(TopoSweden);
   return TopoSweden;
