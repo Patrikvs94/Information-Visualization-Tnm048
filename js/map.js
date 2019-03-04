@@ -1,4 +1,4 @@
-var info = L.control();
+//var info = L.control();
 var clicked_municipality = [];
 
 //Can only be ran ater page has been loaded
@@ -11,7 +11,8 @@ function initializeMap () {
         accessToken: 'pk.eyJ1IjoicGF0cmlrdnMiLCJhIjoiY2pzZDd4aDJhMHJmMDN6bWx1aHJpaGh4bCJ9.auJ5Pnug3A3ZXjkH92669g'
     }).addTo(mymap);
 
-    info.addTo(mymap);
+    update_info();
+    add_legend();
 }
 
 function getColor(d) {
@@ -25,18 +26,25 @@ function getColor(d) {
                     '#FFEDA0';
 }
 
-info.onAdd = function (map) {
-    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-    this.update();
-    return this._div;
-};
-
 //Method that we will use to update the control based on feature properties passed
-info.update = function (props) {
-    this._div.innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
+function update_info(props) {
+    document.getElementById("info").innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
         '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[timespan-1]).toFixed(2) + ' people / mi<sup>2</sup>'
         : 'Hover over a municipality');
 };
+
+//Method to add code to the html div legend
+function add_legend() {
+    grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+    labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        document.getElementById("legend").innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+}
 
 //Method with the standard style for each municipality
 function style(feature) {
@@ -64,7 +72,7 @@ function highlightFeature(e) {
         layer.bringToFront();
     }
 
-    info.update(layer.feature.properties);
+    update_info(layer.feature.properties);
 }
 
 //Method with style for clicking at a municipality
@@ -101,7 +109,7 @@ function markFeature(e) {
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
-    info.update(layer.feature.properties);
+    update_info(layer.feature.properties);
 }
 
 //Method to reset style when not hovering or unclicking a municipality
@@ -123,7 +131,7 @@ function resetHighlight(e) {
             geojson.resetStyle(e.target);
         }
     }
-    info.update();
+    update_info();
 }
 
 //Method used for setting the eventlisteners
