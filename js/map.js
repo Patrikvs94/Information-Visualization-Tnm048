@@ -1,4 +1,5 @@
 var info = L.control();
+var clicked_municipality = [];
 
 //Can only be ran ater page has been loaded
 function initializeMap () {
@@ -30,14 +31,14 @@ info.onAdd = function (map) {
     return this._div;
 };
 
-// method that we will use to update the control based on feature properties passed
+//Method that we will use to update the control based on feature properties passed
 info.update = function (props) {
     this._div.innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
         '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[timespan-1]).toFixed(2) + ' people / mi<sup>2</sup>'
-        : 'Hover over a state');
+        : 'Hover over a municipality');
 };
 
-
+//Method with the standard style for each municipality
 function style(feature) {
     return {
         fillColor: getColor(feature.properties.popDensity[timespan-1]),
@@ -49,6 +50,7 @@ function style(feature) {
     };
 }
 
+//Method with style when hovering over a municipality
 function highlightFeature(e) {
     var layer = e.target;
     layer.setStyle({
@@ -65,10 +67,12 @@ function highlightFeature(e) {
     info.update(layer.feature.properties);
 }
 
+//Method with style for clicking at a municipality
 function markFeature(e) {
     var layer = e.target;
     if (!e.target.hasOwnProperty("marked")) {
         e.target.marked = true;
+        clicked_municipality.push(layer.feature.properties);
         layer.setStyle({
             weight: 1.2,
             color: 'white',
@@ -79,9 +83,12 @@ function markFeature(e) {
     } else {
         if (e.target.marked == true) {
             e.target.marked = false;
+            var index_municipality = clicked_municipality.indexOf(layer.feature.properties); //Check which index to delete from array
+            clicked_municipality.splice(index_municipality, 1); //Splice instead of delete, so that no "holes" in the array will appear
             geojson.resetStyle(e.target);
         } else {
             e.target.marked = true;
+            clicked_municipality.push(layer.feature.properties);
             layer.setStyle({
                 weight: 1.2,
                 color: 'white',
@@ -91,14 +98,13 @@ function markFeature(e) {
             });
         }
     }
-
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
-
     info.update(layer.feature.properties);
 }
 
+//Method to reset style when not hovering or unclicking a municipality
 function resetHighlight(e) {
     var layer = e.target;
 
@@ -117,10 +123,10 @@ function resetHighlight(e) {
             geojson.resetStyle(e.target);
         }
     }
-
     info.update();
 }
 
+//Method used for setting the eventlisteners
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
