@@ -154,7 +154,6 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .style('opacity','0')
         .call(yAxis)
     .append("text")
-
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", ".71em")
