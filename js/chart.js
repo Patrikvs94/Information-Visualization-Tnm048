@@ -34,5 +34,3 @@ var g = svg.append("g")
       .attr("text-anchor", "end")
       .text("Frequency");
 }
-
-initializeChart();
