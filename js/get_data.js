@@ -1,6 +1,9 @@
 const url='http://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101C/BefArealTathetKon';
 const MunicipalityURL = "kommun.json"; // Municipality data from https://gist.github.com/miroli/4280679f81d0006e3142
+const BackupPopulationURL = "Population-backup.json" //loaded when post request fails;
+const BackupMetaDataURL = "metadata-backup.json" //loaded when post request fails;
 var PopulationData;
+var selectedYear;
 
 //Needed to prevent error messages in the console when readin data from json file
 $.ajaxSetup({beforeSend: function(xhr){
@@ -381,19 +384,55 @@ function loadMunicipalityData(TopoSweden) {
       TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan] = parseFloat(thisData.values[0]);
       
       TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j-timespan] = (TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j-timespan]+TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan]);
+      if(j == timespan*2-2)
+        TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j-timespan] =0.0;
     }
   }
   console.log(TopoSweden);
   return TopoSweden;
 }
 
+function timelineChange(currYear) {
+  var currentYear = parseInt(currYear);
+  var firstYear = parseInt(metadata.variables[3].values[0]);
+  selectedYear =  currentYear-firstYear;
+  console.log(selectedYear);
+  //restyleLayer(selectedYear);
+}
+
+function processSCBMetaData(result) {
+  metadata = result;
+  timespan = metadata.variables[3].values.length;
+  selectedYear=timespan-1;
+  for(var i = 0; i < timespan; ++i) {
+    if(i < timespan -1 )
+      $('#timeline').append('<div data-year="' +  metadata.variables[3].values[i] + '"></div>');
+    else
+    $('#timeline').append('<div data-year="' +  metadata.variables[3].values[i] + '" class="active" ></div>');
+  }
+  $('#timeline').timeliny({
+    afterChange: timelineChange
+  });
+  return $.getJSON(MunicipalityURL).then(loadMunicipalityData);
+}
+
+function processSCBData (response) {
+  PopulationData= response;
+  return $.getJSON(BackupMetaDataURL)
+  //return $.getJSON(url)
+  .then(processSCBMetaData)
+  .fail(function(result) {
+    console.log("failed to download metadata from SCB, using backup");
+    return $.getJSON(BackupMetaDataURL).then(processSCBMetaData);
+  });
+
+}
 async function getData() {
-   return $.post(url, JSON.stringify(query)).then(function( response ) {
-    PopulationData= response;
-      return $.getJSON(url).then(function(result) {
-        metadata = result;
-        timespan = metadata.variables[3].values.length;
-        return $.getJSON(MunicipalityURL).then(loadMunicipalityData);
-    });
+    return $.getJSON(BackupPopulationURL)
+   //return $.post(url, JSON.stringify(query))
+   .then(processSCBData)
+    .fail(function(response) {
+    console.log("failed to download data from SCB, using backup");
+    return $.getJSON(BackupPopulationURL).then(processSCBData);
   });
 }

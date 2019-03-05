@@ -1,4 +1,5 @@
-var info = L.control();
+//var info = L.control();
+var clicked_municipality = [];
 
 //Can only be ran after the page has been loaded
 function initializeMap () {
@@ -10,7 +11,8 @@ function initializeMap () {
         accessToken: 'pk.eyJ1IjoicGF0cmlrdnMiLCJhIjoiY2pzZDd4aDJhMHJmMDN6bWx1aHJpaGh4bCJ9.auJ5Pnug3A3ZXjkH92669g'
     }).addTo(mymap);
 
-    info.addTo(mymap);
+    update_info();
+    add_legend();
 }
 
 function getColor(d) {
@@ -24,23 +26,31 @@ function getColor(d) {
                     '#ffffe5';
 }
 
-info.onAdd = function (map) {
-    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-    this.update();
-    return this._div;
-};
 
-// method that we will use to update the control based on feature properties passed
-info.update = function (props) {
-    this._div.innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
-        '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[timespan-1]).toFixed(2) + ' people / mi<sup>2</sup>'
+//Method that we will use to update the control based on feature properties passed
+function update_info(props) {
+    document.getElementById("info").innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
+        '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[selectedYear]).toFixed(2) + ' people / mi<sup>2</sup>'
         : 'Hover over a municipality');
 };
 
+//Method to add code to the html div legend
+function add_legend() {
+    grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+    labels = [];
 
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        document.getElementById("legend").innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+}
+
+//Method with the standard style for each municipality
 function style(feature) {
     return {
-        fillColor: getColor(feature.properties.popDensity[timespan-1]),
+        fillColor: getColor(feature.properties.popDensity[selectedYear]),
         weight: 1.2,
         opacity: 1,
         color: 'white',
@@ -49,6 +59,7 @@ function style(feature) {
     };
 }
 
+//Method with style when hovering over a municipality
 function highlightFeature(e) {
     var layer = e.target;
     layer.setStyle({
@@ -62,13 +73,15 @@ function highlightFeature(e) {
         layer.bringToFront();
     }
 
-    info.update(layer.feature.properties);
+    update_info(layer.feature.properties);
 }
 
+//Method with style for clicking at a municipality
 function markFeature(e) {
     var layer = e.target;
     if (!e.target.hasOwnProperty("marked")) {
         e.target.marked = true;
+        clicked_municipality.push(layer.feature.properties);
         layer.setStyle({
             weight: 1.2,
             color: 'white',
@@ -79,9 +92,12 @@ function markFeature(e) {
     } else {
         if (e.target.marked == true) {
             e.target.marked = false;
+            var index_municipality = clicked_municipality.indexOf(layer.feature.properties); //Check which index to delete from array
+            clicked_municipality.splice(index_municipality, 1); //Splice instead of delete, so that no "holes" in the array will appear
             geojson.resetStyle(e.target);
         } else {
             e.target.marked = true;
+            clicked_municipality.push(layer.feature.properties);
             layer.setStyle({
                 weight: 1.2,
                 color: 'white',
@@ -91,14 +107,13 @@ function markFeature(e) {
             });
         }
     }
-
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
-
-    info.update(layer.feature.properties);
+    update_info(layer.feature.properties);
 }
 
+//Method to reset style when not hovering or unclicking a municipality
 function resetHighlight(e) {
     var layer = e.target;
 
@@ -117,15 +132,29 @@ function resetHighlight(e) {
             geojson.resetStyle(e.target);
         }
     }
-
-    info.update();
+    update_info();
 }
 
+//Method used for setting the eventlisteners
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
         click: markFeature
+    });
+}
+
+function restyleLayer(selectedYear) {
+
+    geojson.eachLayer(function(featuredInstancelayer) {
+        if(featuredInstancelayer != null) {
+            //var propertyValue = featureInstanceLayer.feature.properties.popDensity[selectedYear];
+            console.log(featuredInstancelayer.feature);
+            var theFeature = featuredInstanceLayer.feature;
+            var theStyle = style(theFeature);
+
+            featuredInstanceLayer.setStyle(theStyle);
+        }
     });
 }
 
