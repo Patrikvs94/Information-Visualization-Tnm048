@@ -1,6 +1,6 @@
 var info = L.control();
 
-//Can only be ran ater page has been loaded
+//Can only be ran after the page has been loaded
 function initializeMap () {
     mymap = L.map('mapid').setView([62.2, 17.55], 5);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -14,14 +14,14 @@ function initializeMap () {
 }
 
 function getColor(d) {
-    return d > 1000 ? '#800026' :
-        d > 240  ? '#BD0026' :
-        d > 120  ? '#E31A1C' :
-        d > 60  ? '#FC4E2A' :
-        d > 30   ? '#FD8D3C' :
-        d > 10   ? '#FEB24C' :
-        d > 5   ? '#FED976' :
-                    '#FFEDA0';
+    return d > 4000 ? '#005a32' :
+        d > 2000  ? '#238443' :
+        d > 600  ? '#41ab5d' :
+        d > 200  ? '#78c679' :
+        d > 70   ? '#addd8e' :
+        d > 20   ? '#d9f0a3' :
+        d > 10 ? '#f7fcb9' :
+                    '#ffffe5';
 }
 
 info.onAdd = function (map) {
@@ -34,7 +34,7 @@ info.onAdd = function (map) {
 info.update = function (props) {
     this._div.innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
         '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[timespan-1]).toFixed(2) + ' people / mi<sup>2</sup>'
-        : 'Hover over a state');
+        : 'Hover over a municipality');
 };
 
 

@@ -14,3 +14,9 @@
     margin: 0 0 5px;
     color: #777;
 }
+
+#chartid {
+	height: 500px;
+	width: 500px;
+	float: right;
+}
