@@ -17,13 +17,13 @@ function initializeMap () {
 
 function getColor(d) {
     return d > 4000 ? '#005a32' :
-        d > 2000  ? '#238443' :
+        d > 2000  ? '#238b45' :
         d > 600  ? '#41ab5d' :
-        d > 200  ? '#78c679' :
-        d > 70   ? '#addd8e' :
-        d > 20   ? '#d9f0a3' :
-        d > 10 ? '#f7fcb9' :
-                    '#ffffe5';
+        d > 200  ? '#74c476' :
+        d > 70   ? '#a1d99b' :
+        d > 20   ? '#c7e9c0' :
+        d > 10 ? '#edf8e9' :
+                    '#f7fcf5';
 }
 
 
@@ -51,11 +51,11 @@ function add_legend() {
 function style(feature) {
     return {
         fillColor: getColor(feature.properties.popDensity[selectedYear]),
-        weight: 1.2,
-        opacity: 1,
-        color: 'white',
+        weight: 0.5,
+        opacity: 0.7,
+        color: '#666',
         dashArray: '3',
-        fillOpacity: 0.7
+        fillOpacity: 1
     };
 }
 
