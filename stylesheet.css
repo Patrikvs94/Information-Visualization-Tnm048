@@ -25,12 +25,11 @@
     color: #777;
 }
 
-<<<<<<< HEAD
 #chartid {
 	height: 500px;
 	width: 500px;
-	float: right;
-=======
+    float: right;
+}
 #legend {
     float: left;
     padding: 6px 8px;
@@ -50,5 +49,4 @@
     float: left;
     margin-right: 8px;
     opacity: 0.7;
->>>>>>> cbd5bee77fb739028b964980146ac821dd23f7d1
 }
