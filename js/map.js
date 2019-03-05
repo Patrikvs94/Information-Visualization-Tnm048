@@ -33,14 +33,14 @@ info.onAdd = function (map) {
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
     this._div.innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
-        '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[timespan-1]).toFixed(2) + ' people / mi<sup>2</sup>'
+        '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[selectedYear]).toFixed(2) + ' people / mi<sup>2</sup>'
         : 'Hover over a state');
 };
 
 
 function style(feature) {
     return {
-        fillColor: getColor(feature.properties.popDensity[timespan-1]),
+        fillColor: getColor(feature.properties.popDensity[selectedYear]),
         weight: 1.2,
         opacity: 1,
         color: 'white',
@@ -126,6 +126,20 @@ function onEachFeature(feature, layer) {
         mouseover: highlightFeature,
         mouseout: resetHighlight,
         click: markFeature
+    });
+}
+
+function restyleLayer(selectedYear) {
+
+    geojson.eachLayer(function(featuredInstancelayer) {
+        if(featuredInstancelayer != null) {
+            //var propertyValue = featureInstanceLayer.feature.properties.popDensity[selectedYear];
+            console.log(featuredInstancelayer.feature);
+            var theFeature = featuredInstanceLayer.feature;
+            var theStyle = style(theFeature);
+
+            featuredInstanceLayer.setStyle(theStyle);
+        }
     });
 }
 
