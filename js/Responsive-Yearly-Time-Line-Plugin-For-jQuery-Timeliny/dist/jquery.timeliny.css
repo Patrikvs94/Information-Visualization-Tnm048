@@ -7,8 +7,9 @@
 .timeliny {
   position: relative;
   display: block;
-  margin: 0 auto 4rem;
-  padding: 10rem 0;
+  margin: 0 auto;
+  padding-top: 5rem;
+  padding-bottom: 0rem;
   width: 100%;
   border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
@@ -54,7 +55,7 @@
       content: attr(data-year);
       display: block;
       position: absolute;
-      top: -5rem;
+      top: -1.5rem;
       left: 1.25rem;
       color: #000; }
     .timeliny .timeliny-dot::after {
@@ -87,13 +88,13 @@
       display: table-cell;
       position: relative; }
       .timeliny .timeliny-timeline .timeliny-timeblock.active .timeliny-dot {
-        border-color: #37404A;
-        background-color: #37404A;
+        border-color: #2980b9;
+        background-color: #2980b9;
         -webkit-box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.33);
         -moz-box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.33);
         box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.33); }
         .timeliny .timeliny-timeline .timeliny-timeblock.active .timeliny-dot::before {
-          color: #37404A; }
+          color: #2980b9; }
         .timeliny .timeliny-timeline .timeliny-timeblock.active .timeliny-dot::after {
           color: #000;
           opacity: 1; }

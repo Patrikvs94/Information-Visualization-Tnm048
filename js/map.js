@@ -148,12 +148,9 @@ function restyleLayer(selectedYear) {
 
     geojson.eachLayer(function(featuredInstancelayer) {
         if(featuredInstancelayer != null) {
-            //var propertyValue = featureInstanceLayer.feature.properties.popDensity[selectedYear];
-            console.log(featuredInstancelayer.feature);
-            var theFeature = featuredInstanceLayer.feature;
-            var theStyle = style(theFeature);
+            var theLayer = featuredInstancelayer;
 
-            featuredInstanceLayer.setStyle(theStyle);
+            theLayer.setStyle(style(theLayer.feature));
         }
     });
 }

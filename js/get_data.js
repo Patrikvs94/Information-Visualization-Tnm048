@@ -384,8 +384,6 @@ function loadMunicipalityData(TopoSweden) {
       TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan] = parseFloat(thisData.values[0]);
       
       TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j-timespan] = (TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j-timespan]+TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan]);
-      if(j == timespan*2-2)
-        TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j-timespan] =0.0;
     }
   }
   console.log(TopoSweden);
@@ -396,8 +394,7 @@ function timelineChange(currYear) {
   var currentYear = parseInt(currYear);
   var firstYear = parseInt(metadata.variables[3].values[0]);
   selectedYear =  currentYear-firstYear;
-  console.log(selectedYear);
-  //restyleLayer(selectedYear);
+  restyleLayer(selectedYear);
 }
 
 function processSCBMetaData(result) {
