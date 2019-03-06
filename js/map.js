@@ -30,13 +30,13 @@ function getColor(d) {
 //Method that we will use to update the control based on feature properties passed
 function update_info(props) {
     document.getElementById("info").innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
-        '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[selectedYear]).toFixed(2) + ' people / mi<sup>2</sup>'
+        '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[selectedYear]).toFixed(2) + ' people / km<sup>2</sup>'
         : 'Hover over a municipality');
 };
 
 //Method to add code to the html div legend
 function add_legend() {
-    grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+    grades = [0, 10, 20, 70, 200, 600, 2000, 4000],
     labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
