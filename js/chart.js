@@ -20,10 +20,7 @@ function setChartData() {
     }
 }
 
-var color = d3.scale.ordinal()
-.range(["#ffa801","#ff3f34","#3c40c6", "#00d8d6", "#575fcf"]);
-
-var colors = ["#ffa801","#ff3f34","#3c40c6", "#00d8d6", "#575fcf"];
+var colors = ["#93b5c6","#95edda","#efcf67", "#d7816a", "#bd4f6c"];
 
 var IsColorUsed = [false, false, false, false, false];
 //IsColorUsed.fill(0,4, false);
@@ -55,7 +52,7 @@ data = chartData;
 var years = [2012, 2013, 2014, 2015, 2016, 2017];
   
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
-        width = 960 - margin.left - margin.right,
+        width = 650 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
     var x0 = d3.scale.ordinal()
