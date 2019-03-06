@@ -1,128 +1,174 @@
-//Function to initialize our chart
 
+//This data isn't used for anything it's just here to show how the bar chart data structure should look like
+var chartData = [
+    {
+        "year" : 2017,
+        "values" : [
+            {
+                "popMen": 1.1,
+                "popWomen": 1.1,
+                "municipality": "Norrköping"
+            },
+            {
+                "popMen": 1.1,
+                "popWomen": 1.1,
+                "municipality": "Norrköping"
+            },
+            {
+                "popMen": 1.1,
+                "popWomen": 1.1,
+                "municipality": "Norrköping"
+            }
+        ]
+    }
+];
+
+function setChartData() {
+    var numOfyears=4;
+    var firstYear = parseInt(metadata.variables[3].values[timespan-1]) -numOfyears +1;
+    var firstYearIndex = timespan-numOfyears;
+    chartData = [];
+    for(var i =0; i< numOfyears; ++i) {
+        var yearData = {};
+        yearData.year = firstYear + i;
+        yearData.values = [];
+        for(var j = 0; j < clicked_municipality.length; ++j) {
+            yearData.values[j] = {
+                "popMen": clicked_municipality[j].popDensityMen[firstYearIndex+i],
+                "popWomen": clicked_municipality[j].popDensityWomen[firstYearIndex+i],
+                "municipality" : clicked_municipality[j].KNNAMN
+            };
+        }
+        chartData[i] = yearData;
+    }
+}
+//Function to initialize our chart
 function initializeChart() {
+d3.selectAll("#theBarChart > *").remove();
 var data = [
   {
-      "categorie": "2013", 
+      "year": "2013", 
       "values": [
           {
-              "value": 1,
-              "value2": 2,
-              "rate": "Uddevalla"
+              "popMen": 1,
+              "popWomen": 2,
+              "municipality": "Uddevalla"
           }, 
           {
-              "value": 4, 
-              "value2": 2,
-              "rate": "Lilla Edet"
+              "popMen": 4, 
+              "popWomen": 2,
+              "municipality": "Lilla Edet"
           }, 
           {
-              "value": 12, 
-              "value2": 2,
-              "rate": "Kungälv"
+              "popMen": 12, 
+              "popWomen": 2,
+              "municipality": "Kungälv"
           }
       ]
   }, 
   {
-      "categorie": "2014", 
+      "year": "2014", 
       "values": [
           {
-              "value": 1, 
-              "value2": 2,
-              "rate": "Uddevalla"
+              "popMen": 1, 
+              "popWomen": 2,
+              "municipality": "Uddevalla"
           }, 
           {
-              "value": 21, 
-              "value2": 2,
-              "rate": "Lilla Edet"
+              "popMen": 21, 
+              "popWomen": 2,
+              "municipality": "Lilla Edet"
           }, 
           {
-              "value": 13, 
-              "value2": 2,
-              "rate": "Kungälv"
+              "popMen": 13, 
+              "popWomen": 2,
+              "municipality": "Kungälv"
           }
       ]
   }, 
   {
-      "categorie": "2015", 
+      "year": "2015", 
       "values": [
           {
-              "value": 3, 
-              "value2": 2,
-              "rate": "Uddevalla"
+              "popMen": 3, 
+              "popWomen": 2,
+              "municipality": "Uddevalla"
           }, 
           {
-              "value": 22, 
-              "value2": 2,
-              "rate": "Lilla Edet"
+              "popMen": 22, 
+              "popWomen": 2,
+              "municipality": "Lilla Edet"
           }, 
           {
-              "value": 6, 
-              "value2": 2,
-              "rate": "Kungälv"
+              "popMen": 6, 
+              "popWomen": 2,
+              "municipality": "Kungälv"
           }
       ]
   }, 
   {
-      "categorie": "2016", 
+      "year": "2016", 
       "values": [
           {
-              "value": 12, 
-              "value2": 2,
-              "rate": "Uddevalla"
+              "popMen": 12, 
+              "popWomen": 2,
+              "municipality": "Uddevalla"
           }, 
           {
-              "value": 7, 
-              "value2": 2,
-              "rate": "Lilla Edet"
+              "popMen": 7, 
+              "popWomen": 2,
+              "municipality": "Lilla Edet"
           }, 
           {
-              "value": 18, 
-              "value2": 2,
-              "rate": "Kungälv"
+              "popMen": 18, 
+              "popWomen": 2,
+              "municipality": "Kungälv"
           }
       ]
   }, 
   {
-      "categorie": "2017", 
+      "year": "2017", 
       "values": [
           {
-              "value": 6, 
-              "value2": 2,
-              "rate": "Uddevalla"
+              "popMen": 6, 
+              "popWomen": 2,
+              "municipality": "Uddevalla"
           }, 
           {
-              "value": 15, 
-              "value2": 2,
-              "rate": "Lilla Edet"
+              "popMen": 15, 
+              "popWomen": 2,
+              "municipality": "Lilla Edet"
           }, 
           {
-              "value": 9, 
-              "value2": 2,
-              "rate": "Kungälv"
+              "popMen": 9, 
+              "popWomen": 2,
+              "municipality": "Kungälv"
           }
       ]
   }, 
   {
-      "categorie": "2018", 
+      "year": "2018", 
       "values": [
           {
-              "value": 6, 
-              "value2": 2,
-              "rate": "Uddevalla"
+              "popMen": 6, 
+              "popWomen": 2,
+              "municipality": "Uddevalla"
           }, 
           {
-              "value": 6, 
-              "value2": 2,
-              "rate": "Lilla Edet"
+              "popMen": 6, 
+              "popWomen": 2,
+              "municipality": "Lilla Edet"
           }, 
           {
-              "value": 7, 
-              "value2": 2,
-              "rate": "Kungälv"
+              "popMen": 7, 
+              "popWomen": 2,
+              "municipality": "Kungälv"
           }
       ]
   }
 ];
+
+data = chartData;
 var years = [2012, 2013, 2014, 2015, 2016, 2017];
   
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -147,24 +193,23 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .orient("left");
 
     var color = d3.scale.ordinal()
-        .range(["#ffa801","#ff3f34","#3c40c6"]);
+        .range(["#ffa801","#ff3f34","#3c40c6", "#00d8d6", "#575fcf"]);
 
-    var svg = d3.select('#svgcontainer').append("svg")
+    var svg = d3.select('#theBarChart')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     //The years
-    var categoriesNames = data.map(function(d) { return d.categorie; });
+    var yearsNames = data.map(function(d) { return d.year; });
     //The regions
-    var rateNames = data[0].values.map(function(d) { return d.rate; });
+    var municipalityNames = data[0].values.map(function(d) { return d.municipality; });
 
     //Set limits for x and y axis
-    x0.domain(categoriesNames);
-    x1.domain(rateNames).rangeRoundBands([0, x0.rangeBand()]);
-    y1.domain([0, d3.max(data, function(categorie) { return d3.max(categorie.values, function(d) { return d.value; }); })]);
-    //y2.domain([0, d3.max(data, function(categorie) { return d3.max(categorie.values, function(d) { return d.value; }); })]);
+    x0.domain(yearsNames);
+    x1.domain(municipalityNames).rangeRoundBands([0, x0.rangeBand()]);
+    y1.domain([0, d3.max(data, function(year) { return d3.max(year.values, function(d) { return d.popMen + d.popWomen; }); })]);
 
     svg.append("g")
         .attr("class", "x axis")
@@ -189,7 +234,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .data(data)
         .enter().append("g")
         .attr("class", "g")
-        .attr("transform",function(d) { return "translate(" + x0(d.categorie) + ",0)"; });
+        .attr("transform",function(d) { return "translate(" + x0(d.year) + ",0)"; });
         
     var group = slice.selectAll("rect")
         .data(function(d) { return d.values; })
@@ -198,51 +243,50 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
     group.append("rect")
         .attr("class", "maleBar")
         .attr("width", x1.rangeBand())
-        .attr("x", function(d) { return x1(d.rate); })
-        .style("fill", function(d) { return color(d.rate) })
+        .attr("x", function(d) { return x1(d.municipality); })
+        .style("fill", function(d) { return color(d.municipality) })
         .attr("y", function(d) { return y1(0); })
         .attr("height", function(d) { return height - y1(0); })
         .on("mouseover", function(d) {
-            d3.select(this).style("fill", d3.rgb(color(d.rate)).darker(2));
+            d3.select(this).style("fill", d3.rgb(color(d.municipality)).darker(2));
         })
         .on("mouseout", function(d) {
-            d3.select(this).style("fill", color(d.rate));
+            d3.select(this).style("fill", color(d.municipality));
         });
 
     group.append("rect")
         .attr("class", "femaleBar")
         .attr("width", x1.rangeBand())
-        .attr("x", function(d) { return x1(d.rate); })
-        .style("fill", function(d) { return d3.rgb(color(d.rate)).brighter(0.7) })
+        .attr("x", function(d) { return x1(d.municipality); })
+        .style("fill", function(d) { return d3.rgb(color(d.municipality)).brighter(0.7) })
         .attr("y", function(d) { return y1(0); })
         .attr("height", function(d) { return height - y1(0); })
-        .attr("transform",function(d) { return "translate( 0,-" + (height - y1(d.value)) +")"; })
+        .attr("transform",function(d) { return "translate( 0,-" + (height - y1(d.popMen)) +")"; })
         .on("mouseover", function(d) {
-            d3.select(this).style("fill", d3.rgb(color(d.rate)).brighter(0.7).darker(2));
+            d3.select(this).style("fill", d3.rgb(color(d.municipality)).brighter(0.7).darker(2));
         })
         .on("mouseout", function(d) {
-            d3.select(this).style("fill", d3.rgb(color(d.rate)).brighter(0.7));
+            d3.select(this).style("fill", d3.rgb(color(d.municipality)).brighter(0.7));
         });
 
         
 
     slice.selectAll(".maleBar")
         .transition()
-        .delay(1000)
         .duration(1000)
-        .attr("y", function(d) { return y1(d.value); })
-        .attr("height", function(d) { return height - y1(d.value); });
+        .attr("y", function(d) { return y1(d.popMen); })
+        .attr("height", function(d) { return height - y1(d.popMen); });
 
     slice.selectAll(".femaleBar")
         .transition()
-        .delay(2000)
+        .delay(1000)
         .duration(1000)
-        .attr("y", function(d) { return y1(d.value2); })
-        .attr("height", function(d) { return height - y1(d.value2); });
+        .attr("y", function(d) { return y1(d.popWomen); })
+        .attr("height", function(d) { return height - y1(d.popWomen); });
 
     //Legend
     var legend = svg.selectAll(".legend")
-        .data(data[0].values.map(function(d) { return d.rate; }).reverse())
+        .data(data[0].values.map(function(d) { return d.municipality; }).reverse())
     .enter().append("g")
         .attr("class", "legend")
         .attr("transform", function(d,i) { return "translate(0," + i * 20 + ")"; })

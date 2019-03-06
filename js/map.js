@@ -111,6 +111,8 @@ function markFeature(e) {
         layer.bringToFront();
     }
     update_info(layer.feature.properties);
+    setChartData();
+    initializeChart();
 }
 
 //Method to reset style when not hovering or unclicking a municipality

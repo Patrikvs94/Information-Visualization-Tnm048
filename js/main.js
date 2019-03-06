@@ -1,5 +1,5 @@
 $(document).ready(function() {
     initializeMap();
-    initializeChart();
+    //initializeChart();
     getData().then(addTopoToMap);
 });
