@@ -6,15 +6,18 @@ var data = [
       "categorie": "2013", 
       "values": [
           {
-              "value": 1, 
+              "value": 1,
+              "value2": 2,
               "rate": "Uddevalla"
           }, 
           {
               "value": 4, 
+              "value2": 2,
               "rate": "Lilla Edet"
           }, 
           {
               "value": 12, 
+              "value2": 2,
               "rate": "Kungälv"
           }
       ]
@@ -24,14 +27,17 @@ var data = [
       "values": [
           {
               "value": 1, 
+              "value2": 2,
               "rate": "Uddevalla"
           }, 
           {
               "value": 21, 
+              "value2": 2,
               "rate": "Lilla Edet"
           }, 
           {
               "value": 13, 
+              "value2": 2,
               "rate": "Kungälv"
           }
       ]
@@ -41,14 +47,17 @@ var data = [
       "values": [
           {
               "value": 3, 
+              "value2": 2,
               "rate": "Uddevalla"
           }, 
           {
               "value": 22, 
+              "value2": 2,
               "rate": "Lilla Edet"
           }, 
           {
               "value": 6, 
+              "value2": 2,
               "rate": "Kungälv"
           }
       ]
@@ -58,14 +67,17 @@ var data = [
       "values": [
           {
               "value": 12, 
+              "value2": 2,
               "rate": "Uddevalla"
           }, 
           {
               "value": 7, 
+              "value2": 2,
               "rate": "Lilla Edet"
           }, 
           {
               "value": 18, 
+              "value2": 2,
               "rate": "Kungälv"
           }
       ]
@@ -75,14 +87,17 @@ var data = [
       "values": [
           {
               "value": 6, 
+              "value2": 2,
               "rate": "Uddevalla"
           }, 
           {
               "value": 15, 
+              "value2": 2,
               "rate": "Lilla Edet"
           }, 
           {
               "value": 9, 
+              "value2": 2,
               "rate": "Kungälv"
           }
       ]
@@ -92,14 +107,17 @@ var data = [
       "values": [
           {
               "value": 6, 
+              "value2": 2,
               "rate": "Uddevalla"
           }, 
           {
               "value": 6, 
+              "value2": 2,
               "rate": "Lilla Edet"
           }, 
           {
               "value": 7, 
+              "value2": 2,
               "rate": "Kungälv"
           }
       ]
@@ -116,7 +134,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 
     var x1 = d3.scale.ordinal();
 
-    var y = d3.scale.linear()
+    var y1 = d3.scale.linear()
         .range([height, 0]);
 
     var xAxis = d3.svg.axis()
@@ -125,11 +143,11 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .orient("bottom");
 
     var yAxis = d3.svg.axis()
-        .scale(y)
+        .scale(y1)
         .orient("left");
 
     var color = d3.scale.ordinal()
-        .range(["#d5d5d5","#92c5de","#0571b0"]);
+        .range(["#ffa801","#ff3f34","#3c40c6"]);
 
     var svg = d3.select('#svgcontainer').append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -137,12 +155,16 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    //The years
     var categoriesNames = data.map(function(d) { return d.categorie; });
+    //The regions
     var rateNames = data[0].values.map(function(d) { return d.rate; });
 
+    //Set limits for x and y axis
     x0.domain(categoriesNames);
     x1.domain(rateNames).rangeRoundBands([0, x0.rangeBand()]);
-    y.domain([0, d3.max(data, function(categorie) { return d3.max(categorie.values, function(d) { return d.value; }); })]);
+    y1.domain([0, d3.max(data, function(categorie) { return d3.max(categorie.values, function(d) { return d.value; }); })]);
+    //y2.domain([0, d3.max(data, function(categorie) { return d3.max(categorie.values, function(d) { return d.value; }); })]);
 
     svg.append("g")
         .attr("class", "x axis")
@@ -168,15 +190,18 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .enter().append("g")
         .attr("class", "g")
         .attr("transform",function(d) { return "translate(" + x0(d.categorie) + ",0)"; });
-
-    slice.selectAll("rect")
+        
+    var group = slice.selectAll("rect")
         .data(function(d) { return d.values; })
-    .enter().append("rect")
+        .enter();
+
+    group.append("rect")
+        .attr("class", "maleBar")
         .attr("width", x1.rangeBand())
         .attr("x", function(d) { return x1(d.rate); })
         .style("fill", function(d) { return color(d.rate) })
-        .attr("y", function(d) { return y(0); })
-        .attr("height", function(d) { return height - y(0); })
+        .attr("y", function(d) { return y1(0); })
+        .attr("height", function(d) { return height - y1(0); })
         .on("mouseover", function(d) {
             d3.select(this).style("fill", d3.rgb(color(d.rate)).darker(2));
         })
@@ -184,12 +209,36 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
             d3.select(this).style("fill", color(d.rate));
         });
 
-    slice.selectAll("rect")
+    group.append("rect")
+        .attr("class", "femaleBar")
+        .attr("width", x1.rangeBand())
+        .attr("x", function(d) { return x1(d.rate); })
+        .style("fill", function(d) { return d3.rgb(color(d.rate)).brighter(0.7) })
+        .attr("y", function(d) { return y1(0); })
+        .attr("height", function(d) { return height - y1(0); })
+        .attr("transform",function(d) { return "translate( 0,-" + (height - y1(d.value)) +")"; })
+        .on("mouseover", function(d) {
+            d3.select(this).style("fill", d3.rgb(color(d.rate)).brighter(0.7).darker(2));
+        })
+        .on("mouseout", function(d) {
+            d3.select(this).style("fill", d3.rgb(color(d.rate)).brighter(0.7));
+        });
+
+        
+
+    slice.selectAll(".maleBar")
         .transition()
-        .delay(function (d) {return Math.random()*1000;})
+        .delay(1000)
         .duration(1000)
-        .attr("y", function(d) { return y(d.value); })
-        .attr("height", function(d) { return height - y(d.value); });
+        .attr("y", function(d) { return y1(d.value); })
+        .attr("height", function(d) { return height - y1(d.value); });
+
+    slice.selectAll(".femaleBar")
+        .transition()
+        .delay(2000)
+        .duration(1000)
+        .attr("y", function(d) { return y1(d.value2); })
+        .attr("height", function(d) { return height - y1(d.value2); });
 
     //Legend
     var legend = svg.selectAll(".legend")
