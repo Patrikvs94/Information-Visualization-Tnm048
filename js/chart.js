@@ -1,41 +1,17 @@
-
-//This data isn't used for anything it's just here to show how the bar chart data structure should look like
-var chartData = [
-    {
-        "year" : 2017,
-        "values" : [
-            {
-                "popMen": 1.1,
-                "popWomen": 1.1,
-                "municipality": "Norrköping"
-            },
-            {
-                "popMen": 1.1,
-                "popWomen": 1.1,
-                "municipality": "Norrköping"
-            },
-            {
-                "popMen": 1.1,
-                "popWomen": 1.1,
-                "municipality": "Norrköping"
-            }
-        ]
-    }
-];
-
 function setChartData() {
     var numOfyears=4;
-    var firstYear = parseInt(metadata.variables[3].values[timespan-1]) -numOfyears +1;
-    var firstYearIndex = timespan-numOfyears;
+    var interval = 5;
+    var firstYear = parseInt(metadata.variables[3].values[timespan-1]) -numOfyears*interval +1;
+    var firstYearIndex = timespan-numOfyears*interval;
     chartData = [];
     for(var i =0; i< numOfyears; ++i) {
         var yearData = {};
-        yearData.year = firstYear + i;
+        yearData.year = firstYear + i*interval;
         yearData.values = [];
         for(var j = 0; j < clicked_municipality.length; ++j) {
             yearData.values[j] = {
-                "popMen": clicked_municipality[j].popDensityMen[firstYearIndex+i],
-                "popWomen": clicked_municipality[j].popDensityWomen[firstYearIndex+i],
+                "popMen": clicked_municipality[j].popDensityMen[firstYearIndex+(i*interval)],
+                "popWomen": clicked_municipality[j].popDensityWomen[firstYearIndex+(i*interval)],
                 "municipality" : clicked_municipality[j].KNNAMN
             };
         }
@@ -45,128 +21,6 @@ function setChartData() {
 //Function to initialize our chart
 function initializeChart() {
 d3.selectAll("#theBarChart > *").remove();
-var data = [
-  {
-      "year": "2013", 
-      "values": [
-          {
-              "popMen": 1,
-              "popWomen": 2,
-              "municipality": "Uddevalla"
-          }, 
-          {
-              "popMen": 4, 
-              "popWomen": 2,
-              "municipality": "Lilla Edet"
-          }, 
-          {
-              "popMen": 12, 
-              "popWomen": 2,
-              "municipality": "Kungälv"
-          }
-      ]
-  }, 
-  {
-      "year": "2014", 
-      "values": [
-          {
-              "popMen": 1, 
-              "popWomen": 2,
-              "municipality": "Uddevalla"
-          }, 
-          {
-              "popMen": 21, 
-              "popWomen": 2,
-              "municipality": "Lilla Edet"
-          }, 
-          {
-              "popMen": 13, 
-              "popWomen": 2,
-              "municipality": "Kungälv"
-          }
-      ]
-  }, 
-  {
-      "year": "2015", 
-      "values": [
-          {
-              "popMen": 3, 
-              "popWomen": 2,
-              "municipality": "Uddevalla"
-          }, 
-          {
-              "popMen": 22, 
-              "popWomen": 2,
-              "municipality": "Lilla Edet"
-          }, 
-          {
-              "popMen": 6, 
-              "popWomen": 2,
-              "municipality": "Kungälv"
-          }
-      ]
-  }, 
-  {
-      "year": "2016", 
-      "values": [
-          {
-              "popMen": 12, 
-              "popWomen": 2,
-              "municipality": "Uddevalla"
-          }, 
-          {
-              "popMen": 7, 
-              "popWomen": 2,
-              "municipality": "Lilla Edet"
-          }, 
-          {
-              "popMen": 18, 
-              "popWomen": 2,
-              "municipality": "Kungälv"
-          }
-      ]
-  }, 
-  {
-      "year": "2017", 
-      "values": [
-          {
-              "popMen": 6, 
-              "popWomen": 2,
-              "municipality": "Uddevalla"
-          }, 
-          {
-              "popMen": 15, 
-              "popWomen": 2,
-              "municipality": "Lilla Edet"
-          }, 
-          {
-              "popMen": 9, 
-              "popWomen": 2,
-              "municipality": "Kungälv"
-          }
-      ]
-  }, 
-  {
-      "year": "2018", 
-      "values": [
-          {
-              "popMen": 6, 
-              "popWomen": 2,
-              "municipality": "Uddevalla"
-          }, 
-          {
-              "popMen": 6, 
-              "popWomen": 2,
-              "municipality": "Lilla Edet"
-          }, 
-          {
-              "popMen": 7, 
-              "popWomen": 2,
-              "municipality": "Kungälv"
-          }
-      ]
-  }
-];
 
 data = chartData;
 var years = [2012, 2013, 2014, 2015, 2016, 2017];
@@ -202,14 +56,14 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     //The years
-    var yearsNames = data.map(function(d) { return d.year; });
+    var yearsNames = chartData.map(function(d) { return d.year; });
     //The regions
-    var municipalityNames = data[0].values.map(function(d) { return d.municipality; });
+    var municipalityNames = chartData[0].values.map(function(d) { return d.municipality; });
 
     //Set limits for x and y axis
     x0.domain(yearsNames);
     x1.domain(municipalityNames).rangeRoundBands([0, x0.rangeBand()]);
-    y1.domain([0, d3.max(data, function(year) { return d3.max(year.values, function(d) { return d.popMen + d.popWomen; }); })]);
+    y1.domain([0, d3.max(chartData, function(year) { return d3.max(year.values, function(d) { return d.popMen + d.popWomen; }); })]);
 
     svg.append("g")
         .attr("class", "x axis")
@@ -231,7 +85,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
     svg.select('.y').transition().duration(500).delay(1300).style('opacity','1');
 
     var slice = svg.selectAll(".slice")
-        .data(data)
+        .data(chartData)
         .enter().append("g")
         .attr("class", "g")
         .attr("transform",function(d) { return "translate(" + x0(d.year) + ",0)"; });
@@ -286,7 +140,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 
     //Legend
     var legend = svg.selectAll(".legend")
-        .data(data[0].values.map(function(d) { return d.municipality; }).reverse())
+        .data(chartData[0].values.map(function(d) { return d.municipality; }).reverse())
     .enter().append("g")
         .attr("class", "legend")
         .attr("transform", function(d,i) { return "translate(0," + i * 20 + ")"; })
