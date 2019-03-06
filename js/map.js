@@ -79,29 +79,39 @@ function highlightFeature(e) {
 //Method with style for clicking at a municipality
 function markFeature(e) {
     var layer = e.target;
+
     if (!e.target.hasOwnProperty("marked")) {
         e.target.marked = true;
+        var colorIndex = getColorIndex()
+        layer.feature.properties.colorIndex = colorIndex;
         clicked_municipality.push(layer.feature.properties);
         layer.setStyle({
             weight: 1.2,
             color: 'white',
-            fillColor: '#3473d8',
+            fillColor: colors[colorIndex],
             dashArray: '3',
             fillOpacity: 0.7
         });
-    } else {
+    } 
+    else {
         if (e.target.marked == true) {
             e.target.marked = false;
+
+            if(layer.feature.properties.colorIndex != null)
+                clearColorIndex(layer.feature.properties.colorIndex);
+
             var index_municipality = clicked_municipality.indexOf(layer.feature.properties); //Check which index to delete from array
             clicked_municipality.splice(index_municipality, 1); //Splice instead of delete, so that no "holes" in the array will appear
             geojson.resetStyle(e.target);
         } else {
             e.target.marked = true;
+            var colorIndex = getColorIndex()
+            layer.feature.properties.colorIndex = colorIndex;
             clicked_municipality.push(layer.feature.properties);
             layer.setStyle({
                 weight: 1.2,
                 color: 'white',
-                fillColor: '#3473d8',
+                fillColor: colors[colorIndex],
                 dashArray: '3',
                 fillOpacity: 0.7
             });
@@ -126,7 +136,6 @@ function resetHighlight(e) {
             layer.setStyle({
                 weight: 1.2,
                 color: 'white',
-                fillColor: '#3473d8',
                 dashArray: '3',
                 fillOpacity: 0.7
             });

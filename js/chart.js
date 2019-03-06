@@ -12,12 +12,41 @@ function setChartData() {
             yearData.values[j] = {
                 "popMen": clicked_municipality[j].popDensityMen[firstYearIndex+(i*interval)],
                 "popWomen": clicked_municipality[j].popDensityWomen[firstYearIndex+(i*interval)],
-                "municipality" : clicked_municipality[j].KNNAMN
+                "municipality" : clicked_municipality[j].KNNAMN,
+                "colorIndex" : clicked_municipality[j].colorIndex
             };
         }
         chartData[i] = yearData;
     }
 }
+
+var color = d3.scale.ordinal()
+.range(["#ffa801","#ff3f34","#3c40c6", "#00d8d6", "#575fcf"]);
+
+var colors = ["#ffa801","#ff3f34","#3c40c6", "#00d8d6", "#575fcf"];
+
+var IsColorUsed = [false, false, false, false, false];
+//IsColorUsed.fill(0,4, false);
+
+
+function getColorIndex() {
+    for (var i = 0; i < IsColorUsed.length; ++i) {
+        if(IsColorUsed[i] == false) {
+            IsColorUsed[i] = true;
+            console.log(i);
+            return i;
+        }
+    }
+    return -1;
+}
+
+function clearColorIndex(index) {
+    if(IsColorUsed[index]) {
+        IsColorUsed[index] = false;
+    }
+}
+
+
 //Function to initialize our chart
 function initializeChart() {
 d3.selectAll("#theBarChart > *").remove();
@@ -45,9 +74,6 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
     var yAxis = d3.svg.axis()
         .scale(y1)
         .orient("left");
-
-    var color = d3.scale.ordinal()
-        .range(["#ffa801","#ff3f34","#3c40c6", "#00d8d6", "#575fcf"]);
 
     var svg = d3.select('#theBarChart')
         .attr("width", width + margin.left + margin.right)
@@ -98,29 +124,29 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .attr("class", "maleBar")
         .attr("width", x1.rangeBand())
         .attr("x", function(d) { return x1(d.municipality); })
-        .style("fill", function(d) { return color(d.municipality) })
+        .style("fill", function(d) { return colors[d.colorIndex]; })
         .attr("y", function(d) { return y1(0); })
         .attr("height", function(d) { return height - y1(0); })
         .on("mouseover", function(d) {
-            d3.select(this).style("fill", d3.rgb(color(d.municipality)).darker(2));
+            d3.select(this).style("fill", d3.rgb(colors[d.colorIndex]).darker(2));
         })
         .on("mouseout", function(d) {
-            d3.select(this).style("fill", color(d.municipality));
+            d3.select(this).style("fill", function(d) { return colors[d.colorIndex]; });
         });
 
     group.append("rect")
         .attr("class", "femaleBar")
         .attr("width", x1.rangeBand())
         .attr("x", function(d) { return x1(d.municipality); })
-        .style("fill", function(d) { return d3.rgb(color(d.municipality)).brighter(0.7) })
+        .style("fill", function(d) { return d3.rgb(colors[d.colorIndex]).brighter(0.7) })
         .attr("y", function(d) { return y1(0); })
         .attr("height", function(d) { return height - y1(0); })
         .attr("transform",function(d) { return "translate( 0,-" + (height - y1(d.popMen)) +")"; })
         .on("mouseover", function(d) {
-            d3.select(this).style("fill", d3.rgb(color(d.municipality)).brighter(0.7).darker(2));
+            d3.select(this).style("fill", d3.rgb(colors[d.colorIndex]).brighter(0.7).darker(2));
         })
         .on("mouseout", function(d) {
-            d3.select(this).style("fill", d3.rgb(color(d.municipality)).brighter(0.7));
+            d3.select(this).style("fill", d3.rgb(colors[d.colorIndex]).brighter(0.7));
         });
 
         
