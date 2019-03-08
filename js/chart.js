@@ -48,7 +48,6 @@ function clearColorIndex(index) {
 
 //Method that we will use to update the control based on feature properties passed
 function update_info_for_chart(props, menOrWomen) {
-    console.log("yo");
     document.getElementById("info").innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
         '<b>' + props.municipality.name + ' ' + props.year + '</b><br />' + (props.popMen + props.popWomen).toFixed(2) + ' people / km<sup>2</sup>' +
         '<br />' + (menOrWomen =="women" ? '<b>': '') + (props.popWomen).toFixed(2) + ' women / km<sup>2</sup>' + (menOrWomen =="women" ? '</b>': '') + 
@@ -85,7 +84,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .orient("left");
 
     var svg = d3.select('#theBarChart')
-        .attr("width", width + margin.left + margin.right)
+        .attr("width", width + margin.left + margin.right + 100)
         .attr("height", height + margin.top + margin.bottom)
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -183,7 +182,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .data(chartData[0].values.map(function(d) { return d.municipality; }).reverse())
     .enter().append("g")
         .attr("class", "legend")
-        .attr("transform", function(d,i) { return "translate(0," + i * 20 + ")"; })
+        .attr("transform", function(d,i) { return "translate(90," + i * 20 + ")"; })
         .style("opacity","0");
 
     legend.append("rect")
@@ -207,6 +206,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .attr("y", 9)
         .attr("dy", ".35em")
         .style("text-anchor", "end")
+        .style("opacity","0.7")
         .text(function(d) {return d.name; });
 
     legend.transition().duration(500).delay(function(d,i){ return 1300 + 100 * i; }).style("opacity","1");

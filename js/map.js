@@ -173,6 +173,17 @@ function restyleLayer(selectedYear) {
 	});
 }
 
+function searchLayer(municipality) {
+	geojson.eachLayer(function(featuredInstancelayer) {
+		if(!featuredInstancelayer.hasOwnProperty("KNNAMN")) {
+			if(featuredInstancelayer != null && featuredInstancelayer.feature.properties.KNNAMN == municipality) {
+                var theLayer = featuredInstancelayer;
+                markFeature({target : theLayer});
+			}
+		}
+	});
+}
+
 function addTopoToMap(topoData) {
     geojson = L.geoJson(topojson.feature(topoData, topoData.objects.kommuner), {
       style: style,
