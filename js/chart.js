@@ -15,7 +15,8 @@ function setChartData() {
                 "municipality" : {
                     "name": clicked_municipality[j].KNNAMN,
                     "colorIndex" : clicked_municipality[j].colorIndex
-                }
+                },
+                "year" : yearData.year
             };
         }
         chartData[i] = yearData;
@@ -45,6 +46,15 @@ function clearColorIndex(index) {
     }
 }
 
+//Method that we will use to update the control based on feature properties passed
+function update_info_for_chart(props, menOrWomen) {
+    console.log("yo");
+    document.getElementById("info").innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
+        '<b>' + props.municipality.name + ' ' + props.year + '</b><br />' + (props.popMen + props.popWomen).toFixed(2) + ' people / km<sup>2</sup>' +
+        '<br />' + (menOrWomen =="women" ? '<b>': '') + (props.popWomen).toFixed(2) + ' women / km<sup>2</sup>' + (menOrWomen =="women" ? '</b>': '') + 
+        '<br />' + (menOrWomen =="men" ? '<b>': '') + (props.popMen).toFixed(2) + ' men / km<sup>2</sup>' + (menOrWomen =="men" ? '</b>': '')
+        : 'Hover over a municipality');
+};
 
 //Function to initialize our chart
 function initializeChart() {
@@ -128,9 +138,12 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .attr("height", function(d) { return height - y1(0); })
         .on("mouseover", function(d) {
             d3.select(this).style("fill", d3.rgb(colors[d.municipality.colorIndex]).darker(2));
+            console.log(d);
+            update_info_for_chart(d, "men");
         })
         .on("mouseout", function(d) {
             d3.select(this).style("fill", function(d) { return colors[d.municipality.colorIndex]; });
+            update_info_for_chart();
         });
 
     group.append("rect")
@@ -143,9 +156,11 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .attr("transform",function(d) { return "translate( 0,-" + (height - y1(d.popMen)) +")"; })
         .on("mouseover", function(d) {
             d3.select(this).style("fill", d3.rgb(colors[d.municipality.colorIndex]).brighter(0.7).darker(2));
+            update_info_for_chart(d, "women");
         })
         .on("mouseout", function(d) {
             d3.select(this).style("fill", d3.rgb(colors[d.municipality.colorIndex]).brighter(0.7));
+            update_info_for_chart();
         });
 
         
@@ -178,6 +193,14 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
         .style("fill", function(d) { return colors[d.colorIndex];
         
         });
+        legend.append("rect")
+        .attr("x", width - 18)
+        .attr("width", 18)
+        .attr("height", 18)
+        .attr("transform", "translate( 18,0)")
+        .style("fill", function(d) { return d3.rgb(colors[d.colorIndex]).brighter(0.7);
+        });
+
 
     legend.append("text")
         .attr("x", width - 24)

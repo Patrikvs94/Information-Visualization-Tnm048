@@ -3,7 +3,7 @@ var clicked_municipality = [];
 
 //Can only be ran after the page has been loaded
 function initializeMap () {
-    mymap = L.map('mapid').setView([62.2, 17.55], 5);
+    mymap = L.map('mapid').setView([62.2, 18], 5);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
@@ -30,7 +30,9 @@ function getColor(d) {
 //Method that we will use to update the control based on feature properties passed
 function update_info(props) {
     document.getElementById("info").innerHTML = '<h4>Sweden Population Density</h4>' +  (props ?
-        '<b>' + props.KNNAMN + '</b><br />' + (props.popDensity[selectedYear]).toFixed(2) + ' people / km<sup>2</sup>'
+        '<b>' + props.KNNAMN + ' </b><br />' + (props.popDensity[selectedYear]).toFixed(2) + ' people / km<sup>2</sup>' +
+        '<br />' + (props.popDensityWomen[selectedYear]).toFixed(2) + ' women / km<sup>2</sup>' +
+        '<br />' + (props.popDensityMen[selectedYear]).toFixed(2) + ' men / km<sup>2</sup>'
         : 'Hover over a municipality');
 };
 
