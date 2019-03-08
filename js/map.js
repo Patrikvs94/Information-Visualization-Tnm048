@@ -176,7 +176,7 @@ function restyleLayer(selectedYear) {
 function searchLayer(municipality) {
 	geojson.eachLayer(function(featuredInstancelayer) {
 		if(!featuredInstancelayer.hasOwnProperty("KNNAMN")) {
-			if(featuredInstancelayer != null && featuredInstancelayer.feature.properties.KNNAMN == municipality) {
+			if(featuredInstancelayer != null && featuredInstancelayer.feature.properties.KNNAMN.toLowerCase() == municipality.toLowerCase()) {
                 var theLayer = featuredInstancelayer;
                 markFeature({target : theLayer});
 			}
