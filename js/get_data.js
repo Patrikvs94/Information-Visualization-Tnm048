@@ -4,6 +4,7 @@ const BackupPopulationURL = "Population-backup.json" //loaded when post request 
 const BackupMetaDataURL = "metadata-backup.json" //loaded when post request fails;
 var PopulationData;
 var selectedYear;
+var allMunicipalities = [];
 
 //Needed to prevent error messages in the console when readin data from json file
 $.ajaxSetup({beforeSend: function(xhr){
@@ -365,6 +366,7 @@ function loadMunicipalityData(TopoSweden) {
         regionIndex= j;
         regionFound =true;
         TopoSweden.objects.kommuner.geometries[j].properties.KNNAMN = getRegion(regionCode);
+        allMunicipalities.push(getRegion(regionCode));
         break;
       }
     }
@@ -386,6 +388,11 @@ function loadMunicipalityData(TopoSweden) {
       TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensity[j-timespan] = (TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityMen[j-timespan]+TopoSweden.objects.kommuner.geometries[regionIndex].properties.popDensityWomen[j-timespan]);
     }
   }
+
+  var input = document.getElementById("searchText");
+  new Awesomplete(input, {
+	  list: allMunicipalities
+  });
   console.log(TopoSweden);
   return TopoSweden;
 }

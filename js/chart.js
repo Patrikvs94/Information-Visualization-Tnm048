@@ -52,7 +52,7 @@ function update_info_for_chart(props, menOrWomen) {
         '<b>' + props.municipality.name + ' ' + props.year + '</b><br />' + (props.popMen + props.popWomen).toFixed(2) + ' people / km<sup>2</sup>' +
         '<br />' + (menOrWomen =="women" ? '<b>': '') + (props.popWomen).toFixed(2) + ' women / km<sup>2</sup>' + (menOrWomen =="women" ? '</b>': '') + 
         '<br />' + (menOrWomen =="men" ? '<b>': '') + (props.popMen).toFixed(2) + ' men / km<sup>2</sup>' + (menOrWomen =="men" ? '</b>': '')
-        : 'Hover over a municipality');
+        : 'Hover over a municipality <br /> <br /><br /><br />');
 };
 
 //Function to initialize our chart

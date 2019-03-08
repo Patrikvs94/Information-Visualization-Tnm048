@@ -33,7 +33,7 @@ function update_info(props) {
         '<b>' + props.KNNAMN + ' </b><br />' + (props.popDensity[selectedYear]).toFixed(2) + ' people / km<sup>2</sup>' +
         '<br />' + (props.popDensityWomen[selectedYear]).toFixed(2) + ' women / km<sup>2</sup>' +
         '<br />' + (props.popDensityMen[selectedYear]).toFixed(2) + ' men / km<sup>2</sup>'
-        : 'Hover over a municipality');
+        : 'Hover over a municipality <br /> <br /><br /><br />');
 };
 
 //Method to add code to the html div legend
