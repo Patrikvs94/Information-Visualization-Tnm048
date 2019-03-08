@@ -8,7 +8,6 @@
 }
 
 .awesomplete {
-    display: inline-block;
     position: relative;
 }
 
@@ -57,21 +56,6 @@
 	}
 }
 
-	/* Pointer */
-	.awesomplete > ul:before {
-		content: "";
-		position: absolute;
-		top: -.43em;
-		left: 1em;
-		width: 0; height: 0;
-		padding: .4em;
-		background: white;
-		border: inherit;
-		border-right: 0;
-		border-bottom: 0;
-		-webkit-transform: rotate(45deg);
-		transform: rotate(45deg);
-	}
 
 	.awesomplete > ul > li {
 		position: relative;
@@ -90,15 +74,15 @@
 	}
 	
 		.awesomplete mark {
-			background: hsl(65, 100%, 50%);
+			background: #95edda;
 		}
 		
 		.awesomplete li:hover mark {
-			background: hsl(68, 100%, 41%);
+			background: #7eccbb;
 		}
 		
 		.awesomplete li[aria-selected="true"] mark {
-			background: hsl(86, 100%, 21%);
+			background: #568c80;
 			color: inherit;
 		}
 /*# sourceMappingURL=awesomplete.css.map */

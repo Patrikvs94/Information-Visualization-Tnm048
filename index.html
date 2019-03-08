@@ -10,7 +10,6 @@
     <link href="js/Responsive-Yearly-Time-Line-Plugin-For-jQuery-Timeliny/dist/jquery.timeliny.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="js/awesomplete-gh-pages/prism/prism.css" />
     <link rel="stylesheet" href="js/awesomplete-gh-pages/awesomplete.css" />
     <script src="js/awesomplete-gh-pages/awesomplete.js"></script>
     <script src="js/awesomplete-gh-pages/index.js"></script>
@@ -40,6 +39,14 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="row panelrow" >
+                                    <div class="col-sm">
+                                        <!-- Search form -->
+                                        <form id="searchForm" action="#">
+                                                <input class="form-control" id="searchText" type="text" placeholder="Search" aria-label="Search">
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="row panelrow" >
                                         <div class="col-sm">
                                             <div id="info"></div>
                                         </div>
@@ -51,10 +58,7 @@
                                     </div>
                                     <div class="row panelrow">
                                         <div class="col-sm">
-                                                <!-- Search form -->
-                                                <form id="searchForm" action="#">
-                                                    <input class="form-control" id="searchText" type="text" placeholder="Search" aria-label="Search">
-                                                </form>
+                                              <div id="autocomplete" class="awesomplete"></div>
                                         </div>
                                     </div>
                             </div>
@@ -74,7 +78,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm">
+        <div class="col-sm-3">
             <div id="timeline"></div>
         </div>
     </div>

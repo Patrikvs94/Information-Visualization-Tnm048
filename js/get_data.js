@@ -393,6 +393,8 @@ function loadMunicipalityData(TopoSweden) {
   new Awesomplete(input, {
 	  list: allMunicipalities
   });
+
+  $("#awesomplete_list_1").appendTo("#autocomplete");
   console.log(TopoSweden);
   return TopoSweden;
 }

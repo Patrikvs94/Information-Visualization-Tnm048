@@ -18,6 +18,14 @@
     margin-bottom: 4%;
 }
 
+#autocomplete {
+    margin-left: 5px;
+}
+
+#searchForm {
+    margin-left: 5px;
+}
+
 #info {
     padding: 6px 8px;
     float: left;
