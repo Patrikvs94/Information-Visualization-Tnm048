@@ -80,6 +80,11 @@ function highlightFeature(e) {
 function markFeature(e) {
     var layer = e.target;
 
+    //If the max limit of municipalities already are marked and the user tries to mark a new municipality
+    if (clicked_municipality.length == 5 && e.target.marked != true) {
+        return;
+    } 
+
     if (!e.target.hasOwnProperty("marked")) {
         e.target.marked = true;
         var colorIndex = getColorIndex()
