@@ -82,6 +82,11 @@ function highlightFeature(e) {
 function markFeature(e) {
     var layer = e.target;
 
+    //If the max limit of municipalities already are marked and the user tries to mark a new municipality
+    if (clicked_municipality.length == 5 && e.target.marked != true) {
+        return;
+    } 
+
     if (!e.target.hasOwnProperty("marked")) {
         e.target.marked = true;
         var colorIndex = getColorIndex()
@@ -158,14 +163,14 @@ function onEachFeature(feature, layer) {
 }
 
 function restyleLayer(selectedYear) {
-
-    geojson.eachLayer(function(featuredInstancelayer) {
-        if(featuredInstancelayer != null) {
-            var theLayer = featuredInstancelayer;
-
-            theLayer.setStyle(style(theLayer.feature));
-        }
-    });
+	geojson.eachLayer(function(featuredInstancelayer) {
+		if(!featuredInstancelayer.hasOwnProperty("marked")) {
+			if(featuredInstancelayer != null) {
+				var theLayer = featuredInstancelayer;
+				theLayer.setStyle(style(theLayer.feature));
+			}
+		}
+	});
 }
 
 function addTopoToMap(topoData) {
