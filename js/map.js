@@ -161,14 +161,14 @@ function onEachFeature(feature, layer) {
 }
 
 function restyleLayer(selectedYear) {
-
-    geojson.eachLayer(function(featuredInstancelayer) {
-        if(featuredInstancelayer != null) {
-            var theLayer = featuredInstancelayer;
-
-            theLayer.setStyle(style(theLayer.feature));
-        }
-    });
+	geojson.eachLayer(function(featuredInstancelayer) {
+		if(!featuredInstancelayer.hasOwnProperty("marked")) {
+			if(featuredInstancelayer != null) {
+				var theLayer = featuredInstancelayer;
+				theLayer.setStyle(style(theLayer.feature));
+			}
+		}
+	});
 }
 
 function addTopoToMap(topoData) {
