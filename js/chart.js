@@ -1,8 +1,8 @@
 function setChartData() {
     var numOfyears=4;
     var interval = 5;
-    var firstYear = parseInt(metadata.variables[3].values[timespan-1]) -numOfyears*interval +1;
-    var firstYearIndex = timespan-numOfyears*interval;
+    var firstYear = parseInt(metadata.variables[3].values[timespan-1]) -(numOfyears-1)*interval;
+    var firstYearIndex = timespan-1-(numOfyears-1)*interval;
     chartData = [];
     for(var i =0; i< numOfyears; ++i) {
         var yearData = {};
